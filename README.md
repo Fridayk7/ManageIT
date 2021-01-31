@@ -18,8 +18,11 @@ How to get started:
     
 2. (If you haven't done already) Using your terminal, cd into ManageIT\manageit>
 3. use the commands:
+
     1. python manage.py makemigrations
+    
     2. python manage.py migrate
+
 3.5 if you go back to your pgadmin database, you should see under the "tables" section that now the database is populated with our django models
 
 4. Create a superuser account
