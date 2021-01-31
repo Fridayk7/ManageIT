@@ -6,6 +6,7 @@ How to get started:
     https://www.youtube.com/watch?v=d--mEqEUybA&ab_channel=Telusko
     1b. Create a new database using pgadmin ( I named mine "manageitdb" with password: "password" )
     1c. Using your terminal use the commands (make sure you are inside your django application environment ):
+        
         1. pip install psycopg2
         
         2. pip install psycopg2-binary
