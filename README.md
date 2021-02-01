@@ -6,7 +6,9 @@ How to get started:
     https://www.youtube.com/watch?v=d--mEqEUybA&ab_channel=Telusko
     1b. Create a new database using pgadmin ( I named mine "manageitdb" with password: "password" )
     1c. Using your terminal use the commands (make sure you are inside your django application environment ):
+        
         1. pip install psycopg2
+        
         2. pip install psycopg2-binary
     1c. Go to your settings.py file and scroll down at the "DATABASE" section
     If you named your database something else, or if you are using another password please change the settings accordingly
@@ -16,8 +18,11 @@ How to get started:
     
 2. (If you haven't done already) Using your terminal, cd into ManageIT\manageit>
 3. use the commands:
+
     1. python manage.py makemigrations
+    
     2. python manage.py migrate
+
 3.5 if you go back to your pgadmin database, you should see under the "tables" section that now the database is populated with our django models
 
 4. Create a superuser account
