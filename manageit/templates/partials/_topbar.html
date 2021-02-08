@@ -1,8 +1,9 @@
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top " id="navigation-example">
     <div class="container-fluid">
-      <div class="navbar-wrapper">
-        <a class="navbar-brand" href="javascript:void(0)">Dashboard</a>
-      </div>
+<!--      <div class="navbar-wrapper">-->
+<!--        <a class="navbar-brand" href="javascript:void(0)">Dashboard</a>-->
+<!--      </div>-->
       <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
         <span class="sr-only">Toggle navigation</span>
         <span class="navbar-toggler-icon icon-bar"></span>
@@ -12,12 +13,29 @@
 
       {% if user.is_authenticated %}
       <div class="collapse navbar-collapse justify-content-end">
+        <ul class="nav nav-tabs">
+          <li class="nav-item {% if request.resolver_match.url_name == 'pages-list' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'pages-list' %}">
+              <p>List</p>
+            </a>
+          </li>
+          <li class="nav-item {% if request.resolver_match.url_name == 'pages-gantchart' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'pages-gantchart' %}">
+              <p>GantChart</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'pages-kanban' %}">
+              <p>Kanban</p>
+            </a>
+          </li>
+        </ul>
         <form class="navbar-form">
           <div class="input-group no-border">
             <input type="text" value="" class="form-control" placeholder="Search...">
             <button type="submit" class="btn btn-white btn-round btn-just-icon">
                   <i class="material-icons">search</i>
-                  <div class="ripple-container"></div>
+<!--                  <div class="ripple-container"></div>-->
             </button>
           </div>
         </form>
@@ -31,7 +49,7 @@
             </a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link" href="javscript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link" href="javascript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="material-icons">notifications</i>
               <span class="notification">5</span>
               <p class="d-lg-none d-md-block">
