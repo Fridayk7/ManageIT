@@ -26,8 +26,8 @@ class Task(models.Model):
         return self.name
 
 class TaskRel(models.Model):
-    Source = models.ForeignKey(Task, related_name='source', on_delete=models.DO_NOTHING)
-    Target = models.ForeignKey(Task, related_name='target', on_delete=models.DO_NOTHING)
-    Type = models.CharField(max_length=20)
+    Source = models.ForeignKey(Task, related_name='source', on_delete=models.DO_NOTHING, blank=True, null=True)
+    Target = models.ForeignKey(Task, related_name='target', on_delete=models.DO_NOTHING, blank=True, null=True)
+    Type = models.CharField(max_length=20, blank=True, null=True)
 
 

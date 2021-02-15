@@ -37,25 +37,25 @@
             <div class="form-group">
               <label for="wbs" class="col-form-label">Wbs:</label>
               <select name="wbs_id" class="form-control" style="color:black">
-                  <option selected="false" disabled="disabled" style="color:black" >No Wbs</option>
+                  <option selected="false" value="Null" style="color:black" >No Wbs</option>
                   {%  for wbs in wbss %}
                       <option value="{{wbs.id}}" style="color:black">{{wbs}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-              <label for="wbs" class="col-form-label">Task Dependency:</label>
+              <label for="dependency" class="col-form-label">Task Dependency:</label>
               <select name="task_id" class="form-control" style="color:black">
-                  <option selected="false" disabled="disabled" style="color:black" >No Dependency</option>
+                  <option selected="false" value="Null" style="color:black" >No Dependency</option>
                   {%  for task in tasks %}
                       <option value="{{task.id}}" style="color:black">{{task}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-              <label for="dependency" class="col-form-label">Dependency Type</label>
+              <label for="dependency_type" class="col-form-label">Dependency Type</label>
               <select name="dependency" class="form-control" style="color:black">
-                  <option selected="false" disabled="disabled" style="color:black" >No Dependency</option>
+                  <option selected="false" value="Null" style="color:black" >No Dependency</option>
                   <option value="SS" style="color:black">Start to Start</option>
                   <option value="SF" style="color:black">Start to Finish</option>
                   <option value="FS" style="color:black">Finish to Start</option>
@@ -95,7 +95,7 @@
             <div class="form-group">
               <label for="parent_wbs" class="col-form-label">Parent Wbs:</label>
               <select name="parent_wbs" class="form-control" style="color:black">
-                  <option selected="false" disabled="disabled" style="color:black" >No Parent</option>
+                  <option selected="false" value="Null" style="color:black" >No Parent</option>
                   {%  for wbs in wbss %}
                       <option value="{{wbs.id}}" style="color:black">{{wbs}}</option>
                     {% endfor %}

@@ -32,16 +32,21 @@ def create_task(request):
         start_date = request.POST['start_date']
         end_date = request.POST['end_date']
         wbs_id = request.POST['wbs_id']
-        wbs = WBS.objects.get(pk=wbs_id)
-        task_dep_id = request.POST['task_id']
-        task_dep = Task.objects.get(pk=task_dep_id)
-        type = request.POST['dependency']
+        if wbs_id != "Null":
+            wbs = WBS.objects.get(pk=wbs_id)
+        else:
+            wbs = None
 
         task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs)
         task.save()
 
-        dep = TaskRel(Source= task_dep, Target=task, Type = type)
-        dep.save()
+        task_dep_id = request.POST['task_id']
+        type = request.POST['dependency']
+
+        if task_dep_id != "Null" and type != "Null":
+            task_dep = Task.objects.get(pk=task_dep_id)
+            dep = TaskRel(Source=task_dep, Target=task, Type=type)
+            dep.save()
 
         messages.success ( request, "Task created successfully")
 
@@ -53,7 +58,10 @@ def create_wbs(request):
     if request.method == 'POST':
         wbs_name = request.POST['wbs_name']
         parent_id = request.POST['parent_wbs']
-        parent = WBS.objects.get(pk=parent_id)
+        if parent_id != "Null":
+            parent = WBS.objects.get(pk=parent_id)
+        else:
+            parent = None
         project_id = request.POST['project_id']
         project = Project.objects.get(pk=project_id)
         wbs = WBS(name=wbs_name, parent=parent, project=project)
