@@ -15,42 +15,18 @@
           <p>Projects</p>
         </a>
       </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'pages-dashboard' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'pages-dashboard' %}">
-            <i class="material-icons">dashboard</i>
-            <p>Dashboard</p>
-          </a>
-      </li>
       <li class="nav-item {% if request.resolver_match.url_name == 'pages-account' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'pages-account' %}">
+        <a class="nav-link" href="{% url 'pages-account'  %}">
           <i class="material-icons">person</i>
           <p>User Profile</p>
         </a>
       </li>
-<!--      <li class="nav-item {% if request.resolver_match.url_name == 'pages-list' %}active{% endif %}">-->
-<!--        <a class="nav-link" href="{% url 'pages-list' %}">-->
-<!--          <i class="material-icons">content_paste</i>-->
-<!--          <p>List</p>-->
-<!--        </a>-->
-<!--      </li>-->
       <li class="nav-item {% if request.resolver_match.url_name == 'pages-notifications' %}active{% endif %}">
         <a class="nav-link" href="{% url 'pages-notifications' %}">
           <i class="material-icons">notifications</i>
           <p>Notifications</p>
         </a>
       </li>
-<!--      <li class="nav-item {% if request.resolver_match.url_name == 'pages-gantchart' %}active{% endif %}">-->
-<!--          <a class="nav-link" href="{% url 'pages-gantchart' %}">-->
-<!--            <i class="material-icons">wysiwyg</i>-->
-<!--            <p>GantChart</p>-->
-<!--          </a>-->
-<!--      </li>-->
-<!--      <li class="nav-item {% if request.resolver_match.url_name == 'pages-kanban' %}active{% endif %}">-->
-<!--          <a class="nav-link" href="{% url 'pages-kanban' %}">-->
-<!--            <i class="material-icons">event</i>-->
-<!--            <p>Kanban</p>-->
-<!--          </a>-->
-<!--      </li>-->
     </ul>
   </div>
 </div>

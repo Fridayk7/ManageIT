@@ -14,19 +14,25 @@
       {% if user.is_authenticated %}
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="nav nav-tabs">
-          <li class="nav-item {% if request.resolver_match.url_name == 'pages-list' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'pages-list' %}">
+          <li class="nav-item {% if request.resolver_match.url_name == 'projectpages-list' %}active{% endif %}">
+            <a class="nav-link" href="{% url 'projectpages-list' project_id %}">
               <p>List</p>
             </a>
           </li>
-          <li class="nav-item {% if request.resolver_match.url_name == 'pages-gantchart' %}active{% endif %}">
-            <a class="nav-link" href="{% url 'pages-gantchart' %}">
+          <li class="nav-item {% if request.resolver_match.url_name == 'projectpages-gantchart' %}active{% endif %}">
+            <a id="gantt" class="nav-link" href="{% url 'projectpages-gantchart' project_id%}">
+
               <p>GantChart</p>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'pages-kanban' %}">
+            <a class="nav-link" href="{% url 'projectpages-kanban' project_id %}">
               <p>Kanban</p>
+            </a>
+          </li>
+          <li class="nav-item {% if request.resolver_match.url_name == 'projectpages-dashboard' %}active{% endif %}">
+            <a id="dashboard" class="nav-link" href="{% url 'projectpages-dashboard' project_id %}">
+              <p>Dashboard</p>
             </a>
           </li>
         </ul>

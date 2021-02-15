@@ -30,6 +30,4 @@ class TaskRel(models.Model):
     Target = models.ForeignKey(Task, related_name='target', on_delete=models.DO_NOTHING)
     Type = models.CharField(max_length=20)
 
-    def __str__(self):
-        return self.Source
 

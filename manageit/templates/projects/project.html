@@ -1,4 +1,115 @@
 {% extends "base.html" %}
 {% block content %}
+    {% include 'partials/_topbar.html' %}
     <h1>Project</h1>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal">
+  Create a Task
+</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#wbsModal">
+  Create Work Breakdown Structure
+</button>
+
+<!-- Task Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="taskModalLabel">Create a Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="{% url 'createTask' %}" method = "POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="task_name" class="col-form-label">Task Name:</label>
+              <input type="text" name="task_name" class="form-control" style="color:black" required>
+            </div>
+            <div class="form-group">
+              <label for="start_date" class="col-form-label">Start Date:</label>
+              <input type="date" name="start_date" class="form-control" style="color:black" required>
+            </div>
+            <div class="form-group">
+              <label for="end_date" class="col-form-label">Phone:</label>
+              <input type="date" name="end_date" class="form-control" style="color:black" required>
+            </div>
+            <div class="form-group">
+              <label for="wbs" class="col-form-label">Wbs:</label>
+              <select name="wbs_id" class="form-control" style="color:black">
+                  <option selected="false" disabled="disabled" style="color:black" >No Wbs</option>
+                  {%  for wbs in wbss %}
+                      <option value="{{wbs.id}}" style="color:black">{{wbs}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="wbs" class="col-form-label">Task Dependency:</label>
+              <select name="task_id" class="form-control" style="color:black">
+                  <option selected="false" disabled="disabled" style="color:black" >No Dependency</option>
+                  {%  for task in tasks %}
+                      <option value="{{task.id}}" style="color:black">{{task}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="dependency" class="col-form-label">Dependency Type</label>
+              <select name="dependency" class="form-control" style="color:black">
+                  <option selected="false" disabled="disabled" style="color:black" >No Dependency</option>
+                  <option value="SS" style="color:black">Start to Start</option>
+                  <option value="SF" style="color:black">Start to Finish</option>
+                  <option value="FS" style="color:black">Finish to Start</option>
+                  <option value="FF" style="color:black">Finish to Finish</option>
+                </select>
+            </div>
+
+              <input type="hidden" name="project_id" class="form-control" value="{{project_id}}">
+            <hr>
+            <input type="submit" value="Create" class="btn btn-block btn-secondary">
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Wbs Modal -->
+<div class="modal fade" id="wbsModal" tabindex="-1" role="dialog" aria-labelledby="wbsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="wbsModalLabel">Create a Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form action="{% url 'createWbs' %}" method = "POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="wbs_name" class="col-form-label">WBS Name:</label>
+              <input type="text" name="wbs_name" class="form-control" style="color:black" required>
+            </div>
+            <div class="form-group">
+              <label for="parent_wbs" class="col-form-label">Parent Wbs:</label>
+              <select name="parent_wbs" class="form-control" style="color:black">
+                  <option selected="false" disabled="disabled" style="color:black" >No Parent</option>
+                  {%  for wbs in wbss %}
+                      <option value="{{wbs.id}}" style="color:black">{{wbs}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+              <input type="hidden" name="project_id" class="form-control" value="{{project_id}}">
+            <hr>
+            <input type="submit" value="Create" class="btn btn-block btn-secondary">
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

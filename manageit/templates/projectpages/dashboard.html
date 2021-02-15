@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .testimonial-group > .row {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.testimonial-group > .row > .col-2 {
+  display: inline-block;
+}
+</style>
+<!-- Top bar -->
+      {% include 'partials/_topbar.html' %}
+     <div class="content" id="content">
+        <div class="container-fluid">
+            <div class="col">
+                <div class="container">
+                    <div class="container testimonial-group">
+                      <div class="row">
+                        {% for i in "1234" %}
+                            <div class="col-2">
+                              <div id="wbs_progress{{i}}" class="chart-container" >
+                              </div>
+                            </div>
+                            {% endfor %}
+                         <script src="{% static '/js/test.js' %}?{%now "U" %}" type="text/javascript" ></script>
+                      </div>
+                    </div>
+              </div>
+          <div class="col-2">
+            <!-- Total Project Progress -->
+                    </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div id="burndown" class="chart-container" >
+                <script src="{% static '/js/burndown.js' %}?{%now "U" %}" type="text/javascript" ></script>
+              </div>
+            </div>
+            <div class="col">
+              <div id="piechart" class="chart-container" >
+                  <script src="{% static '/js/pie.js' %}?{%now "U" %}" type="text/javascript" ></script>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h2> Critical Tasks </h2>
+              <ul>
+                <li>Coffee</li>
+                <li>Tea</li>
+                <li>Milk</li>
+              </ul>
+            </div>
+            <div class="col">
+              <h2> Tasks with Slack </h2>
+              <ul style="display: inline-block; *display: inline;">
+                <li>Coffee</li>
+                <li>Tea</li>
+                <li>Milk</li>
+              </ul>
+              <ul style="display: inline-block; *display: inline;">
+                <li>Coffee</li>
+                <li>Tea</li>
+                <li>Milk</li>
+              </ul>
+            </div>
+          </div>
+          <div class "row">
+          <div class="col">
+              <div id="line" class="chart-container" >
+                <script src="{% static '/js/line.js' %}?{%now "U" %}" type="text/javascript" ></script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock content %}

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'projectpages.apps.ProjectpagesConfig',
     'projects.apps.ProjectsConfig',
     'pages.apps.PagesConfig',
     'django.contrib.admin',
@@ -80,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'manageitdb',
         'USER': 'postgres',
-        'PASSWORD': '321',
+        'PASSWORD': 'password',
         'HOST': 'localhost'
     }
 }
