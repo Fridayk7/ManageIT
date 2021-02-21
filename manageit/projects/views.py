@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Project, WBS, Task, TaskRel
+from .models import Project, WBS, Task, TaskRel, TaskUserActivity
 from django.contrib import messages
 
 def home(request):
@@ -32,21 +32,25 @@ def create_task(request):
         start_date = request.POST['start_date']
         end_date = request.POST['end_date']
         wbs_id = request.POST['wbs_id']
+        state = request.POST['state']
         if wbs_id != "Null":
             wbs = WBS.objects.get(pk=wbs_id)
         else:
             wbs = None
 
-        task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs)
+        task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs, state=state)
         task.save()
 
         task_dep_id = request.POST['task_id']
-        type = request.POST['dependency']
+        dep_type = request.POST['dependency']
 
         if task_dep_id != "Null" and type != "Null":
             task_dep = Task.objects.get(pk=task_dep_id)
-            dep = TaskRel(Source=task_dep, Target=task, Type=type)
+            dep = TaskRel(Source=task_dep, Target=task, Type=dep_type)
             dep.save()
+
+        activity = TaskUserActivity(task=task, taskstate=state, action="new")
+        activity.save()
 
         messages.success ( request, "Task created successfully")
 

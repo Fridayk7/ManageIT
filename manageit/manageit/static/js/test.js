@@ -1,11 +1,17 @@
-for ( i = 1; i<=4; i++) {
-    var value = 0.8
+
+for ( var wbs in wbs_progress) {
+    var total = parseInt(wbs_progress[wbs][0])
+    if (total == 0){
+        total=100
+    }
+    var value = parseInt(wbs_progress[wbs][1]) / total
+    console.log(value)
     var text = Math.round(value * 100) + '%'
     var data = [value, 1 - value]
 
     // Settings
     var width = 130
-    var height = 60
+    var height = 100
     var anglesRange = 0.5 * Math.PI
     var radius = Math.min(width, 2 * height) / 2
     var thickness = 20
@@ -26,7 +32,7 @@ for ( i = 1; i<=4; i++) {
     var translation = (x, y) => `translate(${x}, ${y})`
 
     // Feel free to change or delete any of the code you see in this editor!
-    var svg = d3.select("#wbs_progress"+i.toString()).append("svg")
+    var svg = d3.select("#wbs_progress"+wbs.toString()).append("svg")
       .attr("width", width)
       .attr("height", height)
       .attr("class", "half-donut")
@@ -41,9 +47,15 @@ for ( i = 1; i<=4; i++) {
     	.attr("fill", (d, i) => colors[i])
     	.attr("d", arc)
 
-		svg.append("text")
-    	.text( d => text)
-    	.attr("dy", "-1rem")
-    	.attr("class", "label")
-    	.attr("text-anchor", "middle")
+    svg.append("text")
+    .text( d => text)
+    .attr("dy", "-1rem")
+    .attr("class", "label")
+    .attr("text-anchor", "middle")
+
+    svg.append("text")
+    .text( "blah")
+    .attr("dy", "-5rem")
+    .attr("class", "label")
+    .attr("text-anchor", "middle")
     	}

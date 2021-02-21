@@ -5,21 +5,18 @@ google.charts.load('current', {'packages':['corechart']});
 
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
+          ['No state', nostate],
+          ['To-do',     todo],
+          ['In Progress', inprogress],
+          ['Completed',  completed],
         ]);
 
         var options = {
-          title: 'Tasks States',
           'backgroundColor': 'transparent',
           legendTextStyle: { color: '#FFF' },
-          animation: {
-                duration: 1500,
-                startup: true //This is the new option
-            }
+          legend: 'top',
+          width: 400,
+          height: 400,
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
