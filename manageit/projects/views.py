@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from .models import Project, WBS, Task, TaskRel, TaskUserActivity
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+
+@login_required(login_url='accounts-login')
 def home(request):
     wbss = WBS.objects.all()
     projects = Project.objects.all()
@@ -13,6 +16,7 @@ def home(request):
     return render(request, 'projects/projects.html', context)
 
 
+@login_required(login_url='accounts-login')
 def project(request, project_id):
     wbss = WBS.objects.all()
     tasks = Task.objects.all()
@@ -25,6 +29,7 @@ def project(request, project_id):
     return render(request, 'projects/project.html', context)
 
 
+@login_required(login_url='accounts-login')
 def create_task(request):
     if request.method == 'POST':
         project_id = request.POST['project_id']
@@ -58,6 +63,7 @@ def create_task(request):
     return render(request, 'projects/project.html')
 
 
+@login_required(login_url='accounts-login')
 def create_wbs(request):
     if request.method == 'POST':
         wbs_name = request.POST['wbs_name']
@@ -77,6 +83,7 @@ def create_wbs(request):
     return render(request, 'projects/project.html')
 
 
+@login_required(login_url='accounts-login')
 def create_project(request):
     if request.method == 'POST':
         name = request.POST['project_name']

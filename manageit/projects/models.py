@@ -1,13 +1,16 @@
 from django.db import models
 from django.utils.timezone import now
+from accounts.models import Profile
 from django.conf import settings
 from datetime import datetime
+
 
 class Project(models.Model):
     name = models.CharField(max_length=60)
 
     def __str__(self):
         return self.name
+
 
 class WBS(models.Model):
     name = models.CharField(max_length=60)
@@ -16,6 +19,7 @@ class WBS(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Task(models.Model):
     name  = models.CharField(max_length=60)
@@ -27,10 +31,12 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
+
 class TaskRel(models.Model):
     Source = models.ForeignKey(Task, related_name='source', on_delete=models.CASCADE, blank=True, null=True)
     Target = models.ForeignKey(Task, related_name='target', on_delete=models.CASCADE, blank=True, null=True)
     Type = models.CharField(max_length=20, blank=True, null=True)
+
 
 class TaskUserActivity(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
@@ -39,5 +45,14 @@ class TaskUserActivity(models.Model):
     action = models.CharField(max_length=60,blank=True, null=True)
 
 
+class ProjectEmployeeRole(models.Model):
+    USER_ROLE = (
+        ('Staff', 'Staff'),
+        ('Manager', 'Manager'),
+    )
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user_role = models.CharField(max_length=50, choices=USER_ROLE)
 
-
+    def __str__(self):
+        return self.user_role

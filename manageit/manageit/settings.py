@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'projectpages.apps.ProjectpagesConfig',
+    'accounts.apps.AccountsConfig',
     'projects.apps.ProjectsConfig',
     'pages.apps.PagesConfig',
     'django.contrib.admin',
@@ -81,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'manageitdb',
         'USER': 'postgres',
-        'PASSWORD': 'password',
+        'PASSWORD': '321',
         'HOST': 'localhost'
     }
 }
@@ -127,3 +128,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'manageit/static')
 ]
+
+# Messages
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
