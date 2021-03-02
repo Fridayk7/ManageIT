@@ -9,6 +9,8 @@
   Create Work Breakdown Structure
 </button>
 
+
+
 <!-- Task Modal -->
 <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -71,7 +73,15 @@
                   <option value="FF" style="color:black">Finish to Finish</option>
                 </select>
             </div>
-
+              <div class="form-group">
+              <label for="user" class="col-form-label">Assignee</label>
+              <select name="profile_id" class="form-control" style="color:black">
+                  <option selected="false" value="Null" style="color:black" >No Assignee</option>
+                  {%  for profile in users %}
+                      <option value="{{profile.user.id}}" style="color:black">{{profile.user}}</option>
+                    {% endfor %}
+                </select>
+            </div>
               <input type="hidden" name="project_id" class="form-control" value="{{project_id}}">
             <hr>
             <input type="submit" value="Create" class="btn btn-block btn-secondary">
@@ -110,6 +120,7 @@
                     {% endfor %}
                 </select>
             </div>
+
               <input type="hidden" name="project_id" class="form-control" value="{{project_id}}">
             <hr>
             <input type="submit" value="Create" class="btn btn-block btn-secondary">
@@ -121,4 +132,51 @@
     </div>
   </div>
 </div>
+
+
+<h2>Team Members: </h2>
+<div class="container">
+  <div class="row">
+    <div class="col">
+    <button type="button" class="btn btn-primary" onclick="myFunction()">Invite Your Team!</button>
+
+    <div id="refLink" style="display:none">
+        {{ref_link}}
+    </div>
+        <script>
+        function myFunction() {
+          var x = document.getElementById("refLink");
+          if (x.style.display === "none") {
+            x.style.display = "block";
+          } else {
+            x.style.display = "none";
+          }
+        }
+    </script>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2>Project Managers</h2>
+        {% for manager in managers %}
+          <ul class="nav nav-pills nav-stacked anyClass">
+              <li>{{manager.user}}</li>
+          </ul>
+        {% endfor %}
+    </div>
+    <div class="col">
+       <h2>Project Staff</h2>
+        {% for st in staff %}
+          <ul class="nav nav-pills nav-stacked anyClass">
+              <li>{{st.user}}</li>
+          </ul>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+
+
 {% endblock content %}

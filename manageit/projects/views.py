@@ -1,16 +1,18 @@
 from django.shortcuts import render, redirect
-from .models import Project, WBS, Task, TaskRel, TaskUserActivity
+from .models import Project, WBS, Task, TaskRel, TaskUserActivity, ProjectEmployeeRole
+from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
 @login_required(login_url='accounts-login')
 def home(request):
-    wbss = WBS.objects.all()
-    projects = Project.objects.all()
+    user_id = request.user.id
+    profile = Profile.objects.get(user__id=user_id)
+    project_employees = ProjectEmployeeRole.objects.filter(user__id=profile.id)
+    print(project_employees)
     context = {
-        'wbss': wbss,
-        'projects': projects
+        'projects': project_employees
     }
 
     return render(request, 'projects/projects.html', context)
@@ -18,12 +20,20 @@ def home(request):
 
 @login_required(login_url='accounts-login')
 def project(request, project_id):
-    wbss = WBS.objects.all()
-    tasks = Task.objects.all()
+    wbss = WBS.objects.filter(project__id=project_id)
+    tasks = Task.objects.filter(wbs__project__id=project_id)
+    managers = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role = ProjectEmployeeRole.MANAGER)
+    staff = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role=ProjectEmployeeRole.STAFF)
+    users = managers | staff
+    link = 'http://127.0.0.1:8000/'+Profile.objects.get(user__id=request.user.id).code+ '.'+ Project.objects.get(id=project_id).code
     context = {
         "project_id": project_id,
         "wbss": wbss,
-        "tasks": tasks
+        "tasks": tasks,
+        "managers": managers,
+        "staff": staff,
+        "users": users,
+        "ref_link": link
     }
 
     return render(request, 'projects/project.html', context)
@@ -38,12 +48,16 @@ def create_task(request):
         end_date = request.POST['end_date']
         wbs_id = request.POST['wbs_id']
         state = request.POST['state']
+        profile_id = request.POST['profile_id']
         if wbs_id != "Null":
             wbs = WBS.objects.get(pk=wbs_id)
         else:
             wbs = None
-
-        task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs, state=state)
+        if profile_id != "Null":
+            user = Profile.objects.get(id=profile_id)
+        else:
+            user = None
+        task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs, state=state, user=user)
         task.save()
 
         task_dep_id = request.POST['task_id']
@@ -87,9 +101,14 @@ def create_wbs(request):
 def create_project(request):
     if request.method == 'POST':
         name = request.POST['project_name']
-
         project = Project(name=name)
         project.save()
 
-        messages.success ( request, "Project created successfully")
+        userid = request.POST['user_id']
+        user = Profile.objects.get(user__id=userid)
+
+        project_employee = ProjectEmployeeRole(project=project, user=user, user_role='Manager')
+        project_employee.save()
+        messages.success (request, "Project created successfully")
+
     return redirect("/projects/")

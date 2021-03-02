@@ -26,14 +26,11 @@
                             </div>
                             {% endfor %}
                           <script>var wbs_progress = {{wbs_progress|safe}} </script>
-                         <script src="{% static '/js/test.js' %}?{%now "U" %}" type="text/javascript" ></script>
-                      </div>
+                          <script src="{% static '/js/test.js' %}?{%now "U" %}" type="text/javascript" ></script>
+                         </div>
                     </div>
-              </div>
-          <div class="col-2">
-            <!-- Total Project Progress -->
-                    </div>
-          </div>
+                </div>
+            </div>
           <div class="row">
             <div class="col">
               <div id="burndown" class="chart-container" >
@@ -78,11 +75,17 @@
           </div>
           <div class "row">
           <div class="col">
-              <div id="line" class="chart-container" >
-                <script src="{% static '/js/line.js' %}?{%now "U" %}" type="text/javascript" ></script>
+              <h2> Workload </h2>
+              <div id="workload" class="chart-container" >
+
+                  <script>
+                      var users_tasks = {{users_tasks|safe}};
+                  </script>
+                <script src="{% static '/js/bar.js' %}?{%now "U" %}" type="text/javascript" ></script>
               </div>
             </div>
           </div>
         </div>
       </div>
+
 {% endblock content %}

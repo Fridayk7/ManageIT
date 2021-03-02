@@ -25,5 +25,5 @@ urlpatterns = [
     path('', include('pages.urls')),
     path('projects/', include('projects.urls')),
     path('admin/', admin.site.urls),
-    path('<str:ref_code>/', user_views.get_code, name='accounts-get-code'),
+    path('<str:ref_code>.<str:project_code>/', user_views.get_code, name='accounts-get-code'),
 ]

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from projects.models import Project,WBS,Task,TaskRel,TaskUserActivity
+from projects.models import Project,WBS,Task,TaskRel,TaskUserActivity,ProjectEmployeeRole
 import json
 import datetime
 
@@ -28,6 +28,14 @@ def dashboard(request, project_id):
     # Log(n)
     wbs = WBS.objects.filter(project__id=project_id)
     tasks = Task.objects.filter(wbs__project__id=project_id)
+    profiles = ProjectEmployeeRole.objects.filter(project_id=project_id)
+    users_tasks = {}
+    for profile in profiles:
+        user_to_do = tasks.filter(user__id=profile.user.id).filter(state="todo")
+        user_in_progress = tasks.filter(user__id=profile.user.id).filter(state="inprogress")
+        user_completed = tasks.filter(user__id=profile.user.id).filter(state="completed")
+        users_tasks[str(profile.user)] = [len(user_to_do),len(user_in_progress),len(user_completed)]
+
     activities = TaskUserActivity.objects.filter(task__wbs__project__id = project_id)
     journey = {}
     wbs_progress = {}
@@ -82,6 +90,7 @@ def dashboard(request, project_id):
     completed_JSON = json.dumps(completed)
     journey_JSON = json.dumps(journey)
     wbs_progress_JSON = json.dumps(wbs_progress)
+    users_tasks_JSON = json.dumps(users_tasks)
 
     context= {
         "project_id": project_id,
@@ -91,6 +100,7 @@ def dashboard(request, project_id):
         "completed": completed_JSON,
         "journey": journey_JSON,
         "wbs_progress": wbs_progress_JSON,
-        "wbs_ids": ids
+        "wbs_ids": ids,
+        "users_tasks": users_tasks_JSON
     }
     return render(request, 'projectpages/dashboard.html', context)
