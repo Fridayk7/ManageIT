@@ -1,6 +1,81 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<!-- Top bar -->
-      {% include 'partials/_topbar.html' %}
-    <h1>List</h1>
+<style>
+.collap {
+	background-color: #ccc;
+	color: #444;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 15px;}
+	
+.collap_content {
+	padding: 18px;
+	display: none;
+	overflow: hidden;
+	background-color:#f1f1f1;}
+
+.collap:after {
+	content: '\02795'; /* Unicode character for "plus" sign (+) */
+	font-size: 13px;
+	color: white;
+	float: right;
+	margin-left: 5px;}
+	
+table, th, td {
+	table-layout: fixed;
+	border: 1px solid black;
+	border-collapse: collapse;}
+
+.activated:after {
+	content: "\2796"; /* Unicode character for "minus" sign (-) */}
+</style>
+{% include 'partials/_topbar.html' %}
+<h1>List</h1>
+{% for wbs in wbs_list %}
+	<button type="button" class="collap">{{wbs.name}}</button>
+		<div class="collap_content">
+			<table  style="width:100%">
+				<tr>
+					<th>Name</th>
+					<th>Start</th>
+					<th>End</th>
+					<th>WBS</th>
+					<th>State</th>
+				</tr>
+				{% for task in task_list %}
+					{% if wbs == task.wbs %}
+						<tr>
+							<td>{{task.name}}</td>
+							<td>{{task.start}}</td>
+							<td>{{task.end}}</td>
+							<td>{{task.wbs}}</td>
+							<td>{{task.state}}</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</table>
+		</div>
+{% endfor %}
+<script>
+var coll = document.getElementsByClassName("collap");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+	coll[i].addEventListener("click", function() {
+		this.classList.toggle("activated");
+		var content = this.nextElementSibling;
+		if (content.style.display === "block") {
+			content.style.display = "none";
+		} else {
+			content.style.display = "block";
+		}
+	});
+}
+
+</script>
 {% endblock content %}
