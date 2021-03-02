@@ -7,15 +7,27 @@ def activity(request):
     return render(request, 'projectpages/activity.html')
 
 def list(request, project_id):
+    wbs = WBS.objects.filter(project__id=project_id)
+    tasks = Task.objects.filter(wbs__project__id=project_id)
+
     context = {
-        "project_id": project_id
-    }
+        "project_id": project_id,
+        "wbs_list": wbs,
+        "task_list": tasks}
     return render(request, 'projectpages/list.html', context)
 
 def kanban(request, project_id):
-    context = {
-        "project_id": project_id
-    }
+    wbs = WBS.objects.filter(project__id=project_id)
+    nostate = Task.objects.filter(wbs__project__id=project_id,state="nostate")
+    todo = Task.objects.filter(wbs__project__id=project_id,state="todo")
+    inprogress = Task.objects.filter(wbs__project__id=project_id,state="inprogress")
+    completed = Task.objects.filter(wbs__project__id=project_id,state="completed")
+
+    context = {"project_id": project_id,
+               "nostate_list": nostate,
+               "todo_list": todo,
+               "inprogress_list": inprogress,
+               "completed_list": completed}
     return render(request, 'projectpages/kanban.html', context)
 
 def gantchart(request, project_id):
