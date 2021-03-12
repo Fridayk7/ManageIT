@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from projects.models import Project,WBS,Task,TaskRel,TaskUserActivity,ProjectEmployeeRole
+from projects.models import Project, WBS, Task, TaskRel, TaskUserActivity, ProjectEmployeeRole
 import json
 import datetime
 
@@ -9,11 +9,15 @@ def activity(request):
 def list(request, project_id):
     wbs = WBS.objects.filter(project__id=project_id)
     tasks = Task.objects.filter(wbs__project__id=project_id)
-
+    project = Project.objects.get(id=project_id)
+    struct = project.structure()
+    json_struct = json.dumps(struct)
     context = {
         "project_id": project_id,
         "wbs_list": wbs,
-        "task_list": tasks}
+        "task_list": tasks,
+        "structure": json_struct
+    }
     return render(request, 'projectpages/list.html', context)
 
 def kanban(request, project_id):

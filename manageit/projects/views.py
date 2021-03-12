@@ -36,6 +36,7 @@ def project(request, project_id):
         "ref_link": link
     }
 
+
     return render(request, 'projects/project.html', context)
 
 
@@ -82,11 +83,12 @@ def create_wbs(request):
     if request.method == 'POST':
         wbs_name = request.POST['wbs_name']
         parent_id = request.POST['parent_wbs']
+        project_id = request.POST['project_id']
         if parent_id != "Null":
             parent = WBS.objects.get(pk=parent_id)
         else:
-            parent = None
-        project_id = request.POST['project_id']
+            parent = WBS.objects.get(project__id=project_id, is_root=True)
+
         project = Project.objects.get(pk=project_id)
         wbs = WBS(name=wbs_name, parent=parent, project=project)
         wbs.save()
@@ -103,6 +105,9 @@ def create_project(request):
         name = request.POST['project_name']
         project = Project(name=name)
         project.save()
+
+        root_wbs = WBS(name="Root_"+name, project=project, is_root=True)
+        root_wbs.save()
 
         userid = request.POST['user_id']
         user = Profile.objects.get(user__id=userid)
