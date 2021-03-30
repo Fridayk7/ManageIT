@@ -19,10 +19,5 @@ def projects(request):
 
 
 @login_required(login_url='accounts-login')
-def account(request):
-    return render(request, 'pages/account.html')
-
-
-@login_required(login_url='accounts-login')
 def notifications(request):
     return render(request, 'pages/notifications.html')

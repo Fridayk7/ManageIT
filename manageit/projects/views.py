@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Project, WBS, Task, TaskRel, TaskUserActivity, ProjectEmployeeRole
+from django.contrib.auth.models import User
 from accounts.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
 
 
 @login_required(login_url='accounts-login')
@@ -50,12 +54,13 @@ def create_task(request):
         wbs_id = request.POST['wbs_id']
         state = request.POST['state']
         profile_id = request.POST['profile_id']
+
         if wbs_id != "Null":
             wbs = WBS.objects.get(pk=wbs_id)
         else:
             wbs = None
         if profile_id != "Null":
-            user = Profile.objects.get(id=profile_id)
+            user = Profile.objects.get(id=profile_id)     # test-fc09d43c40b7
         else:
             user = None
         task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs, state=state, user=user)
@@ -117,3 +122,63 @@ def create_project(request):
         messages.success (request, "Project created successfully")
 
     return redirect("/projects/")
+
+
+@login_required(login_url='accounts-login')
+def invite_team(request):
+    if request.method == 'POST':
+        user_username = request.POST['user_username']
+        current_user = request.user
+        project_id = request.POST['project_id']
+        link = 'http://127.0.0.1:8000/' + Profile.objects.get(
+            user__id=request.user.id).code + '.' + Project.objects.get(id=project_id).code
+
+        # print(link)
+        # print('0')
+        if user_username != '':
+            user_email = Profile.objects.get(user__username=user_username).user.email
+            recipient_name = Profile.objects.get(user__username=user_username).user.first_name
+            template = render_to_string('projects/email_template.html',
+                                    {'receiver_name': recipient_name, 'link': link,
+                                     'sender_name': current_user.first_name})
+
+            email = EmailMessage(
+                'You are invited to join a team project.',
+                template,
+                settings.EMAIL_HOST_USER,
+                [user_email],
+            )
+
+            # print(user_username)
+            # print('1')
+            # print(user_email)
+            # print(recipient_name)
+            # print(current_user)
+            # print(project_id)
+
+            email.fail_silently = False
+            email.send()
+
+        else:
+            user_email = request.POST['user_email']
+            recipient_name = ''
+            template = render_to_string('projects/email_template.html',
+                                    {'receiver_name': recipient_name, 'link': link,
+                                     'sender_name': current_user.first_name})
+
+            email = EmailMessage(
+                'You are invited to join a team project.',
+                template,
+                settings.EMAIL_HOST_USER,
+                [user_email],
+            )
+
+            # print(user_email)
+            # print(current_user)
+            # print(project_id)
+
+            email.fail_silently = False
+            email.send()
+
+        return redirect("/projects/" + project_id)
+    return render(request, 'projects/project.html')
