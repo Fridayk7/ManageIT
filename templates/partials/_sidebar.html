@@ -1,0 +1,72 @@
+{% load static %}
+<!--<style>-->
+
+<!--  @media screen and (max-width: 700px) {-->
+<!--    .sidebar {-->
+<!--      width: 100%;-->
+<!--      height: auto;-->
+<!--      position: relative;-->
+<!--    }-->
+<!--    .sidebar a img {float: left;}-->
+<!--    div.content {margin-left: 0;}-->
+<!--  }-->
+
+<!--  @media screen and (max-width: 400px) {-->
+<!--    .sidebar a img {-->
+<!--      text-align: center;-->
+<!--      float: none;-->
+<!--    }-->
+<!--  }-->
+<!--</style>-->
+
+<div class="sidebar" data-color="purple" data-background-color="black" data-image="{% static 'img/sidebar-2.jpg' %}">
+  <!--
+    Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+
+    Tip 2: you can also add an image using data-image tag
+-->
+  <div class="content">
+      <div class="logo"><a href="" class="simple-text logo-normal">
+        <img src="{% static 'img/logo.png' %}" ></a></div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'projects' %}">
+                <i class="material-icons">apps</i>
+                <p>Projects</p>
+              </a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'accounts-account' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'accounts-account' %}">
+                <i class="material-icons">person</i>
+                <p>User Profile</p>
+              </a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'notifications' %}">
+                <i class="material-icons">notifications</i>
+                <p>Notifications</p>
+              </a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'accounts-logout' %}">
+                  <p>Logout</p>
+                </a>
+            </li>
+          {% else %}
+            <li class="nav-item {% if request.resolver_match.url_name == 'accounts-register' %}active{% endif %}">
+              <a class="nav-link" href="{% url 'accounts-register' %}">
+                <p>Register</p>
+              </a>
+            </li>
+            <li class="nav-item {% if request.resolver_match.url_name == 'accounts-login' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'accounts-login' %}">
+                  <p>LogIn</p>
+                </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+  </div>
+</div>
