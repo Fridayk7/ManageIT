@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import django_heroku
 import os
 from pathlib import Path
 
@@ -23,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'fp7^ee-*xma=*+@_avl43^l+4eoxk^$$vzcl)0s4yi6l*p2o=&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False           # Make it = True :)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['manage--it.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -151,3 +152,7 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
+
