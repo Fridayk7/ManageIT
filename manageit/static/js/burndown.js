@@ -19,6 +19,8 @@ function drawChart() {
                 textStyle:{color: '#FFF'}
             },
             legendTextStyle: { color: '#FFF' },
+            width: 500,
+            height: 300,
             };
 
             // Instantiate and draw the chart.
