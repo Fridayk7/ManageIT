@@ -28,3 +28,17 @@ How to get started:
 4. Create a superuser account
 5. Run the server and log into your account. You should see all the tables and be able to create new entries through the admin page
 
+## Gmail
+- `Email:` manageit.easyy@gmail.com
+- `PS:` ManageIT321
+
+
+## PayPal Sandbox
+
+###### (Personal)
+- `Email:` Per_SonaL_Sandbox@gmail.com
+- `PS:` ManageIT321
+
+###### (Business)
+- `Email:` BizNess_Sandbox@gmail.com
+- `PS:` ManageIT321
