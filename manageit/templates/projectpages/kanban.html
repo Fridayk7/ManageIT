@@ -139,7 +139,6 @@ li {
 <h1>KanBan</h1>
 <div class="main-container">
   <ul class="columns">
-
     <li class="column todo-column">
 		<div class="column-header">
 			<h4>To Do</h4>
@@ -467,6 +466,7 @@ function dragula (initialContainers, options) {
     var clientX = getCoord('clientX', e);
     var clientY = getCoord('clientY', e);
     var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
+    console.log(elementBehindCursor)
     var dropTarget = findDropTarget(elementBehindCursor, clientX, clientY);
     if (dropTarget && ((_copy && o.copySortSource) || (!_copy || dropTarget !== _source))) {
       drop(item, dropTarget);

@@ -5,6 +5,8 @@ from .utils import generate_ref_code
 from django.conf import settings
 from datetime import datetime
 from itertools import chain
+import pandas as pd
+import numpy as np
 
 
 class Project(models.Model):
@@ -95,6 +97,45 @@ class Project(models.Model):
         return myData
         """
 
+    def progress(self):
+        root = WBS.objects.get(project=self, is_root=True)
+        queue = [root]
+        stack = []
+        progress = {}
+        while queue:
+            root = queue.pop(0)
+            stack.append(root)
+            root_children = root.children_wbs()
+            for i in reversed(root_children):
+                queue.append(i)
+        for i in reversed(stack):
+            progress[i.id] = {}
+            all_tasks = Task.objects.filter(wbs=i)
+            completed_tasks = all_tasks.filter(state="completed")
+            total_progress = 0
+            completed_progress = 0
+
+            for task in all_tasks:
+                start = pd.to_datetime(task.start, format="%Y/%m/%d").date()
+                end = pd.to_datetime(task.end, format="%Y/%m/%d").date()
+                total_progress += np.busday_count(start, end) + 1
+
+            for task in completed_tasks:
+                start = pd.to_datetime(task.start, format="%Y/%m/%d").date()
+                end = pd.to_datetime(task.end, format="%Y/%m/%d").date()
+                completed_progress += np.busday_count(start, end) + 1
+
+            for wbs in i.children_wbs():
+                total_progress += progress[wbs.id]['total_progress']
+                completed_progress += progress[wbs.id]['completed_progress']
+
+            progress[i.id]['total_progress'] = total_progress
+            progress[i.id]['completed_progress'] = completed_progress
+            progress[i.id]['name'] = i.name
+
+        return progress
+
+
 class WBS(models.Model):
     name = models.CharField(max_length=60)
     parent = models.ForeignKey("self",  on_delete=models.CASCADE,blank=True, null=True)
@@ -140,7 +181,6 @@ class TaskUserActivity(models.Model):
     date = models.DateField(default= now, blank=True)
     taskstate = models.CharField(max_length=60,blank=True, null=True)
     action = models.CharField(max_length=60,blank=True, null=True)
-
 
 class ProjectEmployeeRole(models.Model):
     STAFF = 'Staff'

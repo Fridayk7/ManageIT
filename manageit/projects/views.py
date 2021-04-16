@@ -20,6 +20,8 @@ def home(request):
 
 @login_required(login_url='accounts-login')
 def project(request, project_id):
+    project = Project.objects.get(id=project_id)
+    project.progress()
     wbss = WBS.objects.filter(project__id=project_id)
     tasks = Task.objects.filter(wbs__project__id=project_id)
     managers = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role = ProjectEmployeeRole.MANAGER)
