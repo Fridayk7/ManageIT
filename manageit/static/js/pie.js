@@ -15,8 +15,8 @@ google.charts.load('current', {'packages':['corechart']});
           'backgroundColor': 'transparent',
           legendTextStyle: { color: '#FFF' },
           legend: 'top',
-          width: 400,
-          height: 400,
+          width: 300,
+          height: 300,
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));

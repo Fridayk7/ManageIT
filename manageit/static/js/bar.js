@@ -1,5 +1,4 @@
 google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
         viz_table = [['Employee', 'to-do', 'in-progress', 'completed']]
@@ -9,11 +8,12 @@ google.charts.load('current', {'packages':['bar']});
         var data = google.visualization.arrayToDataTable(viz_table);
 
         var options = {
-            'backgroundColor': 'transparent',
-            animation: {
-                duration: 1500,
-                startup: true //This is the new option
-            },
+            chartArea: {
+                backgroundColor: {
+                  fill: 'transparent'
+                },
+              },
+            backgroundColor: 'transparent',
             hAxis: {
                 textStyle:{color: '#FFF'}
             },
@@ -24,3 +24,4 @@ google.charts.load('current', {'packages':['bar']});
 
         chart.draw(data, google.charts.Bar.convertOptions(options));
       }
+            google.charts.setOnLoadCallback(drawChart);
