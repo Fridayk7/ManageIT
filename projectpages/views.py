@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from projects.models import Project, WBS, Task, TaskRel, TaskUserActivity, ProjectEmployeeRole
 import json
 import datetime
@@ -10,15 +10,46 @@ def list(request, project_id):
     wbs = WBS.objects.filter(project__id=project_id)
     tasks = Task.objects.filter(wbs__project__id=project_id)
     project = Project.objects.get(id=project_id)
-    struct = project.structure()
-    json_struct = json.dumps(struct)
+    managers = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role = ProjectEmployeeRole.MANAGER)
+    staff = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role=ProjectEmployeeRole.STAFF)
+    users = managers | staff
+    states = []
+    states.append("todo")
+    states.append("inprogress")
+    states.append("completed")
     context = {
         "project_id": project_id,
         "wbs_list": wbs,
         "task_list": tasks,
-        "structure": json_struct
+        "users": users,
+        "states": states
     }
     return render(request, 'projectpages/list.html', context)
+
+def update_task(request, project_id):
+    wbs = WBS.objects.filter(project__id=project_id)
+    tasks = Task.objects.filter(wbs__project__id=project_id)
+    if request.method == 'POST':
+        name = request.POST['task_name']
+        start = request.POST['start_date']
+        end = request.POST['end_date']
+        wbs = request.POST['wbs_id']
+        state = request.POST['state']
+        task_id = request.POST['task_id']
+        project = request.POST['project']
+        project=str(project)
+        for task in tasks:
+            if str(task.id) == str(task_id):
+                task.name = name
+                task.state = state
+                if wbs != "Null":
+                    task.wbs = WBS.objects.get(id=wbs)
+                else:
+                    task.wbs = None
+                task.save()
+                print("Task Update Success")
+        return redirect("/projects/"+project+"/list")
+    return render(request,'projectpages/list.html')
 
 def kanban(request, project_id):
     wbs = WBS.objects.filter(project__id=project_id)
