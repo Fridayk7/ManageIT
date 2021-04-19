@@ -7,4 +7,5 @@ urlpatterns = [
     path('kanban/', views.kanban, name='projectpages-kanban'),
     path('gantchart/', views.gantchart, name='projectpages-gantchart'),
     path('dashboard/', views.dashboard, name='projectpages-dashboard'),
+    path('list/updateTask', views.update_task, name='updateTask'),
     ]
