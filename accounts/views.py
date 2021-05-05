@@ -142,7 +142,7 @@ def user_account(request):
     form2 = ImageUpdateForm(instance=current_user_profile_image)
 
     user_profile = Profile.objects.get(user=current_user)
-    tasks = Task.objects.filter(user=user_profile)
+    tasks = Task.objects.filter(user=user_profile).filter(active=True)
 
     if request.method == 'POST':
         form = UserDataUpdateForm(request.POST, instance=current_user)

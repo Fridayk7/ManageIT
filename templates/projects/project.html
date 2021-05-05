@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
     {% include 'partials/_topbar.html' %}
-    <h1>Project</h1>
+    <h1>{{project_name}}</h1>
+{% if messages %}
+		{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong>{{message}}</strong>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{% endfor %}
+	{% endif %}
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal">
   Create a Task
 </button>
@@ -51,21 +61,22 @@
               <div class="form-group">
               <label for="state" class="col-form-label">State</label>
               <select name="state" class="form-control" style="color:black">
-                  <option selected="false" value="Null" style="color:black" >No State</option>
-                  <option value="todo" style="color:black">To Do</option>
+                  <option value="todo" style="color:black" selected>To Do</option>
                   <option value="inprogress" style="color:black">In Progress</option>
                   <option value="completed" style="color:black">Completed</option>
                 </select>
             </div>
             <div class="form-group">
               <label for="dependency" class="col-form-label">Task Dependency:</label>
-              <select name="task_id" class="form-control" style="color:black">
+                <br>
+              <select name="task_id" class="form-control" style="color:black; height: 100%;" size="5" multiple>
                   <option selected="false" value="Null" style="color:black" >No Dependency</option>
                   {%  for task in tasks %}
                       <option value="{{task.id}}" style="color:black">{{task}}</option>
                     {% endfor %}
                 </select>
             </div>
+              <!--
             <div class="form-group">
               <label for="dependency_type" class="col-form-label">Dependency Type</label>
               <select name="dependency" class="form-control" style="color:black">
@@ -75,7 +86,7 @@
                   <option value="FS" style="color:black">Finish to Start</option>
                   <option value="FF" style="color:black">Finish to Finish</option>
                 </select>
-            </div>
+            </div>-->
               <div class="form-group">
               <label for="user" class="col-form-label">Assignee</label>
               <select name="profile_id" class="form-control" style="color:black">

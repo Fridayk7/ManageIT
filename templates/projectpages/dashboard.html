@@ -16,6 +16,7 @@
      <div class="content" id="content">
         <div class="container-fluid">
             <div class="col">
+                <h2> WBS Progress </h2>
                 <div class="container">
                     <div class="container testimonial-group">
                       <div class="row">
@@ -25,7 +26,7 @@
                               </div>
                             </div>
                             {% endfor %}
-                          <script>var wbs_progress = {{wbs_progress|safe}} </script>
+                          <script>var progress = {{wbs_progress|safe}} </script>
                           <script src="{% static '/js/test.js' %}?{%now "U" %}" type="text/javascript" ></script>
                          </div>
                     </div>
@@ -33,6 +34,7 @@
             </div>
           <div class="row">
             <div class="col">
+              <h2> Task Burndown </h2>
               <div id="burndown" class="chart-container" >
                 <script>
                 var journey = {{journey|safe}};
@@ -45,39 +47,16 @@
               </div>
             </div>
             <div class="col">
+              <h2> Tasks </h2>
               <div id="piechart" class="chart-container" >
                   <script src="{% static '/js/pie.js' %}?{%now "U" %}" type="text/javascript" ></script>
                 </div>
             </div>
           </div>
           <div class="row">
-            <div class="col">
-              <h2> Critical Tasks </h2>
-              <ul>
-                <li>Coffee</li>
-                <li>Tea</li>
-                <li>Milk</li>
-              </ul>
-            </div>
-            <div class="col">
-              <h2> Tasks with Slack </h2>
-              <ul style="display: inline-block; *display: inline;">
-                <li>Coffee</li>
-                <li>Tea</li>
-                <li>Milk</li>
-              </ul>
-              <ul style="display: inline-block; *display: inline;">
-                <li>Coffee</li>
-                <li>Tea</li>
-                <li>Milk</li>
-              </ul>
-            </div>
-          </div>
-          <div class "row">
           <div class="col">
               <h2> Workload </h2>
               <div id="workload" class="chart-container" >
-
                   <script>
                       var users_tasks = {{users_tasks|safe}};
                   </script>

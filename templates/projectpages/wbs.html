@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% include 'partials/_topbar.html' %}
+<h1>Wbs</h1>
+<style>
+.collap {
+  background-color: #913f9e;
+  border-radius: 4px;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin: 4px 5px
+}
+.collap_content {
+  padding: 0 18px;
+  display: none;
+  overflow: auto;
+  background-color: #f1f1f1;
+}
+table.google-visualization-orgchart-table {
+    border-collapse: separate;
+}
+
+</style>
+<html>
+  <head>
+	  <script src=" https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {packages:["orgchart"]});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('string', 'Manager');
+        data.addColumn('string', 'ToolTip');
+
+        var viz_table = []
+        var structure = {{structure|safe}}
+        console.log(structure)
+        viz_table.push([structure[Object.keys(structure)[0]].name,'',''])
+        for (var wbs in structure){
+            structure[wbs].children_wbs.forEach(function(child){
+            viz_table.push([structure[child].name,structure[wbs].name, ''] )
+            })
+        }
+        console.log(viz_table)
+        // For each orgchart box, provide the name, manager, and tooltip to show.
+        data.addRows(viz_table);
+        // Create the chart.
+        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        // Draw the chart, setting the allowHtml option to true for the tooltips.
+        chart.draw(data, {'allowHtml':true, allowCollapse:true});
+      }
+   </script>
+    </head>
+  <body>
+    <div id="chart_div"></div>
+	{% if messages %}
+		{% for message in messages %}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong>{{message}}</strong>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{% endfor %}
+	{% endif %}
+    <button type="button" class="collap">Edit Wbs</button>
+    <div class="collap_content">
+    {% for wbs in wbss %}
+	<form action="updateWbs" method = "POST">
+		{% csrf_token %}
+		<label for="wbs_name">Name:</label>
+		<input type="text"  name="wbs_name" style="color:black" value="{{wbs.name}}">
+        {% if wbs != root %}
+		<label for="parent">Parent:</label>
+		<select name="parent" style="color:black">
+			{%  for parent in wbss %}
+				{% if parent == wbs.parent %}
+					<option value="{{parent.id}}" style="color:black" selected>{{parent}}</option>
+				{% else %}
+					<option value="{{parent.id}}" style="color:black">{{parent}}</option>
+				{% endif %}
+			{% endfor %}
+		</select>
+        {% endif %}
+		<input type="hidden" name="wbs_id" id="wbs_id" value="{{wbs.id}}">
+		<input type="hidden" name="project" id="project" value="{{project_id}}">
+		<input type="submit" value="update">
+	</form>
+		{% if wbs != root %}
+	<form action="deleteWbs" method="POST" style="border-bottom: 2px solid #913f9e;">
+		{% csrf_token %}
+		 <button type="submit" name='delete' value={{wbs.id}}>Delete</button>
+	 </form>
+		{% endif %}
+	{% endfor %}
+    </div>
+  </body>
+</html>
+<script>
+var coll = document.getElementsByClassName("collap");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("activated");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+$('.alert').alert()
+
+
+</script>
+{% endblock content %}
+

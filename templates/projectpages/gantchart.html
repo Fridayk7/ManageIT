@@ -1,6 +1,173 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-<!-- Top bar -->
-      {% include 'partials/_topbar.html' %}
-    <h1>GanttChart</h1>
-{% endblock content %}
+{% include 'partials/_topbar.html' %}
+<style>
+
+div.gantt {
+  height: 400px;
+  overflow: scroll;
+}
+.collap_content {
+  padding: 0 18px;
+  display: none;
+  overflow: auto;
+  background-color: #f1f1f1;
+}
+.collap {
+  background-color: #913f9e;
+  border-radius: 4px;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 20px;
+  margin: 4px 5px
+}
+</style>
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+    var tasks = {{tasks|safe}}
+    var viz_table = []
+    for (var task in tasks) {
+        var start_split = tasks[task].start_date.split("-");
+        var end_split = tasks[task].end_date.split("-");
+        var start = new Date(start_split[0],start_split[1]-1,start_split[2]);
+        var end = new Date(end_split[0],end_split[1]-1,end_split[2]);
+        viz_table.push([ task, tasks[task].name, start,
+        end, end-start, null, tasks[task].dep.toString()])
+            }
+    function daysToMilliseconds(days) {
+      return days * 24 * 60 * 60 * 1000;
+    }
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+      data.addRows(viz_table);
+
+      var trackHeight = 40;
+      var options = {
+      gantt: {
+      trackHeight: trackHeight,
+        palette: [
+          {
+            "color": "#913f9e",
+            "dark": "#333333",
+            "light": "#eeeeee"
+          }
+        ]
+      },
+        height: data.getNumberOfRows() * trackHeight*1.5
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+    function drawChartCritical() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task ID');
+      data.addColumn('string', 'Task Name');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+      data.addColumn('number', 'Duration');
+      data.addColumn('number', 'Percent Complete');
+      data.addColumn('string', 'Dependencies');
+
+      data.addRows(viz_table);
+
+      var trackHeight = 40;
+      var options = {
+      gantt: {
+      criticalPathEnabled: true,
+            criticalPathStyle: {
+              stroke: '#e64a19',
+              strokeWidth: 5
+            },
+      trackHeight: trackHeight,
+        palette: [
+          {
+            "color": "#913f9e",
+            "dark": "#333333",
+            "light": "#eeeeee"
+          }
+        ]
+      },
+        height: data.getNumberOfRows() * trackHeight*1.5
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+</head>
+<body>
+  <div class = "gantt" id="chart_div"></div>
+<button type="button" class="collap">Critical Tasks</button>
+  <div class="collap_content">
+    <table style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>StartDate</th>
+        <th>EndDate</th>
+        <th>Wbs</th>
+        <th>State</th>
+        <th>Assignee</th>
+      </tr>
+      {% for task in critical_tasks%}
+      <tr>
+        <td>{{task.name}}</td>
+        <td>{{task.start}}</td>
+        <td>{{task.end}}</td>
+        <td>{{task.wbs}}</td>
+        <td>{{task.state}}</td>
+        <td>{{task.assignee}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+<script>
+  var coll = document.getElementsByClassName("collap");
+  var i;
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("activated");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+        google.charts.setOnLoadCallback(drawChart);
+
+      } else {
+        content.style.display = "block";
+        google.charts.setOnLoadCallback(drawChartCritical);
+
+      }
+    });
+  }
+</script>
+</body>
+</html>
+
+
+
+{%endblock%}

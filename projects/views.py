@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from .models import Project, WBS, Task, TaskRel, TaskUserActivity, ProjectEmployeeRole
 from django.contrib.auth.models import User
 from accounts.models import Profile
@@ -7,14 +7,14 @@ from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.template.loader import render_to_string
-
+from .forms import Dependencies
+from .utils import check_valid_dates, auto_schedule
 
 @login_required(login_url='accounts-login')
 def home(request):
     user_id = request.user.id
     profile = Profile.objects.get(user__id=user_id)
     project_employees = ProjectEmployeeRole.objects.filter(user__id=profile.id)
-    print(project_employees)
     context = {
         'projects': project_employees
     }
@@ -25,15 +25,17 @@ def home(request):
 @login_required(login_url='accounts-login')
 def project(request, project_id):
     project = Project.objects.get(id=project_id)
-    project.progress()
-    wbss = WBS.objects.filter(project__id=project_id)
-    tasks = Task.objects.filter(wbs__project__id=project_id)
+    wbss = WBS.objects.filter(project__id=project_id).filter(active=True)
+    tasks = Task.objects.filter(wbs__project__id=project_id).filter(active=True)
     managers = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role = ProjectEmployeeRole.MANAGER)
     staff = ProjectEmployeeRole.objects.filter(project__id=project_id).filter(user_role=ProjectEmployeeRole.STAFF)
     users = managers | staff
+    for manager in managers:
+        print (manager.user)
     link = 'http://127.0.0.1:8000/'+Profile.objects.get(user__id=request.user.id).code+ '.'+ Project.objects.get(id=project_id).code
     context = {
         "project_id": project_id,
+        "project_name": project.name,
         "wbss": wbss,
         "tasks": tasks,
         "managers": managers,
@@ -53,6 +55,9 @@ def create_task(request):
         task_name = request.POST['task_name']
         start_date = request.POST['start_date']
         end_date = request.POST['end_date']
+        if start_date > end_date:
+            messages.error(request, f"End date must be set later that the start date")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         wbs_id = request.POST['wbs_id']
         state = request.POST['state']
         profile_id = request.POST['profile_id']
@@ -65,16 +70,23 @@ def create_task(request):
             user = Profile.objects.get(id=profile_id)     # test-fc09d43c40b7
         else:
             user = None
+        if state == "Null":
+            state = "todo"
         task = Task(name=task_name, start=start_date, end=end_date, wbs=wbs, state=state, user=user)
         task.save()
 
-        task_dep_id = request.POST['task_id']
-        dep_type = request.POST['dependency']
+        task_dep_id = request.POST.getlist("task_id")
 
-        if task_dep_id != "Null" and type != "Null":
-            task_dep = Task.objects.get(pk=task_dep_id)
-            dep = TaskRel(Source=task_dep, Target=task, Type=dep_type)
-            dep.save()
+        check_result = check_valid_dates(task, start_date, task_dep_id)
+        if check_result["success"]:
+            if "Null" not in task_dep_id:
+                for i in task_dep_id:
+                    task_dep = Task.objects.get(pk=i)
+                    dep = TaskRel(source=task_dep, target=task)
+                    dep.save()
+        else:
+            for message in check_result["messages"]:
+                messages.error(request, f"%s" % message)
 
         activity = TaskUserActivity(task=task, taskstate=state, action="new")
         activity.save()
@@ -88,9 +100,12 @@ def create_task(request):
 @login_required(login_url='accounts-login')
 def create_wbs(request):
     if request.method == 'POST':
-        wbs_name = request.POST['wbs_name']
-        parent_id = request.POST['parent_wbs']
         project_id = request.POST['project_id']
+        wbs_name = request.POST['wbs_name']
+        if WBS.objects.filter(project_id=project_id).filter(active=True).filter(name=wbs_name):
+            messages.error(request, f"The name of a wbs must be unique")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        parent_id = request.POST['parent_wbs']
         if parent_id != "Null":
             parent = WBS.objects.get(pk=parent_id)
         else:

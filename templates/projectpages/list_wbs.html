@@ -51,11 +51,11 @@
 		</div>
 		{% endfor %}
 	{% endif %}
-{% for state in states %}
-<button type="button" class="collap">{{state}}</button>
+{% for wbs in wbs_list %}
+<button type="button" class="collap">{{wbs}}</button>
 <div class="collap_content">
 	{% for task in task_list %}
-	{% if state == task.state %}
+	{% if wbs == task.wbs %}
 	<form action="updateTask" method = "POST">
 		{% csrf_token %}
 		<label for="task_name">Task Name:</label>
