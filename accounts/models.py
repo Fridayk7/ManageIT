@@ -31,7 +31,7 @@ class Profile(models.Model):
     recommended_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name='ref_by')
 
     def __str__(self):
-        return f"{self.user.username}-{self.code}"
+        return f"{self.user.username}"
 
     def get_recommended_profiles(self):
         pass
