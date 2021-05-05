@@ -50,64 +50,6 @@ class Project(models.Model):
             nodes_remaining = children_wbs
         return structure
 
-    """
-    def structure2(self):
-        myData = []
-        myDataDict = {}
-        wbsDict = {-1 : None}
-        for wbs in WBS.objects.filter(project=self):
-            parent_id = -1
-            if wbs.parent:
-                parent_id = wbs.parent.id
-            wbsDict[wbs.id] = [parent_id, wbs.name]
-        print(wbsDict)
-
-        for task in Task.objects.filter(wbs__project=self):
-            wbs_id = task.wbs.id
-            wbs_path = str(wbs_id) + "." + str(task.id)
-            while wbsDict[wbs_id] is not None:
-                print(wbs_id)
-                next = wbsDict[wbs_id][0]
-                wbs_path = str(next)+"."+wbs_path
-                wbs_id = next
-            myDataDict[task.id] = {"name": wbs_path}
-
-        for key in myDataDict:
-            myData.append(myDataDict[key])
-
-        
-        hierarchy = {}
-
-        def find(name, data):
-            try:
-                node = hierarchy[name]
-            except KeyError:
-                node = None
-
-            if node is None:
-                if data:
-                    node = data
-                    hierarchy[name] = data
-                else:
-                    node = {"name": name, "children": []}
-                    hierarchy[name] = {"name": name, "children": []}
-                if len(name):
-                    try:
-                        substring = name[0:name.rindex(".")]
-                    except ValueError:
-                        substring = ""
-                    node['parent'] = find(substring, None)
-                    node['parent']["children"].append(node)
-
-            return node
-
-        for i in myData:
-            find(i['name'], i)
-
-        print (hierarchy)
-        return myData
-        """
-
     def progress(self):
         # returns a dictionary that includes the progress(value) of each wbs(key) in a project
         root = WBS.objects.get(project=self, is_root=True)
