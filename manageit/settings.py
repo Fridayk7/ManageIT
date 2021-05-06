@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'manageitdb',
         'USER': 'postgres',
-        'PASSWORD': '321',
+        'PASSWORD': 'password',
         'HOST': 'localhost'
     }
 }
@@ -122,9 +122,11 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
+
+DATE_FORMAT = "Y-m-d"
 
 
 # Static files (CSS, JavaScript, Images)

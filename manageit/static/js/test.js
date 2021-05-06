@@ -1,11 +1,9 @@
-
 for ( var wbs in wbs_progress) {
-    var total = parseInt(wbs_progress[wbs][0])
+    var total = parseInt(wbs_progress[wbs]["total_progress"])
     if (total == 0){
         total=100
     }
-    var value = parseInt(wbs_progress[wbs][1]) / total
-    console.log(value)
+    var value = parseInt(wbs_progress[wbs]["completed_progress"]) / total
     var text = Math.round(value * 100) + '%'
     var data = [value, 1 - value]
 
@@ -54,7 +52,7 @@ for ( var wbs in wbs_progress) {
     .attr("text-anchor", "middle")
 
     svg.append("text")
-    .text( "blah")
+    .text(wbs_progress[wbs]["name"])
     .attr("dy", "-5rem")
     .attr("class", "label")
     .attr("text-anchor", "middle")
