@@ -23,11 +23,14 @@ lazy-object-proxy==1.4.3
 legacy==0.1.6
 MarkupSafe==1.1.1
 mccabe==0.6.1
+numpy==1.20.2
+pandas==1.2.4
 Pillow==8.1.0
 pipenv==2020.11.15
 psycopg2==2.8.6
 psycopg2-binary==2.8.6
 pylint==2.6.0
+python-dateutil==2.8.1
 pytz==2020.4
 signals==0.0.2
 six==1.15.0
