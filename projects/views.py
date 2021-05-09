@@ -32,7 +32,7 @@ def project(request, project_id):
     users = managers | staff
     for manager in managers:
         print (manager.user)
-    link = 'http://127.0.0.1:8000/'+Profile.objects.get(user__id=request.user.id).code+ '.'+ Project.objects.get(id=project_id).code
+    link = 'https://manage--it.herokuapp.com/'+Profile.objects.get(user__id=request.user.id).code+ '.'+ Project.objects.get(id=project_id).code
     context = {
         "project_id": project_id,
         "project_name": project.name,
@@ -147,7 +147,7 @@ def invite_team(request):
         user_username = request.POST['user_username']
         current_user = request.user
         project_id = request.POST['project_id']
-        link = 'http://127.0.0.1:8000/' + Profile.objects.get(
+        link = 'https://manage--it.herokuapp.com/' + Profile.objects.get(
             user__id=request.user.id).code + '.' + Project.objects.get(id=project_id).code
 
         # print(link)
