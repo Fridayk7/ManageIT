@@ -92,6 +92,7 @@ DATABASES = {
         'HOST': 'localhost'
     }
 }
+
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
@@ -150,7 +151,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'manageit.easyy@gmail.com'
-EMAIL_HOST_PASSWORD = 'ManageIT321'
+EMAIL_HOST_PASSWORD = 'yecrtcihikasddau'
 
 # Messages
 from django.contrib.messages import constants as messages
