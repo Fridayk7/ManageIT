@@ -9,6 +9,10 @@ Use the folowing default credentials to access a demo account with sample data:
     Username: TEST
 
     Password: APS12_ZZS8
+    
+A demonstration video can also be found in the following link:
+
+    https://youtu.be/0qDfEVLgLmc
 
 ## Local Environment, how to get started:
 1. Clone the github repository of the project, or download the source code. Using your terminal navigate in the root folder “ManageIT”.
