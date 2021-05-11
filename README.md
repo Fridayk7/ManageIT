@@ -59,6 +59,8 @@ A demonstration video can also be found in the following link:
     
     `pip install -U selenium`
     
+    `pip install webdriver_manager`
+ 
 9. Run the following commands to apply the migrations in your postgresql database
 
     `python manage.py makemigrations`
